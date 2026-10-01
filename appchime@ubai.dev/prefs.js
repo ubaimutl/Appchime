@@ -72,6 +72,10 @@ export default class AppchimePreferences extends ExtensionPreferences {
         }
     }
 
+    _reportError(action, error) {
+        console.error(`[Appchime] ${action} failed: ${error.message}`);
+    }
+
     _buildSoundsPage() {
         const page = new Adw.PreferencesPage({
             title: 'Sounds',
@@ -720,7 +724,7 @@ export default class AppchimePreferences extends ExtensionPreferences {
             try {
                 dir.make_directory_with_parents(null);
             } catch (e) {
-                console.error(`[Appchime] convert failed: ${e.message}`);
+                this._reportError('convert', e);
                 done(false);
                 return;
             }
@@ -733,7 +737,7 @@ export default class AppchimePreferences extends ExtensionPreferences {
                 ' ! audioconvert ! audioresample ! vorbisenc quality=0.6' +
                 ' ! oggmux ! filesink location="' + esc(part.get_path()) + '"');
         } catch (e) {
-            console.error(`[Appchime] convert failed: ${e.message}`);
+            this._reportError('convert', e);
             done(false);
             return;
         }
@@ -741,7 +745,7 @@ export default class AppchimePreferences extends ExtensionPreferences {
         bus.add_watch(GLib.PRIORITY_DEFAULT, (_bus, message) => {
             if (message.type === Gst.MessageType.ERROR) {
                 const [err] = message.parse_error();
-                console.error(`[Appchime] convert failed: ${err.message}`);
+                this._reportError('convert', err);
                 pipeline.set_state(Gst.State.NULL);
                 done(false);
                 return GLib.SOURCE_REMOVE;
@@ -821,7 +825,7 @@ export default class AppchimePreferences extends ExtensionPreferences {
             pipeline = Gst.parse_launch(
                 `filesrc location="${path}" ! mpegaudioparse ! mpg123audiodec ! audioconvert ! autoaudiosink`);
         } catch (e) {
-            console.error(`[Appchime] preview failed: ${e.message}`);
+            this._reportError('preview', e);
             return;
         }
         this._previewPipeline = pipeline;
@@ -829,7 +833,7 @@ export default class AppchimePreferences extends ExtensionPreferences {
         bus.add_watch(GLib.PRIORITY_DEFAULT, (_bus, message) => {
             if (message.type === Gst.MessageType.ERROR) {
                 const [err] = message.parse_error();
-                console.error(`[Appchime] preview failed: ${err.message}`);
+                this._reportError('preview', err);
                 this._stopPreviewPipeline();
                 return GLib.SOURCE_REMOVE;
             }
@@ -865,7 +869,7 @@ export default class AppchimePreferences extends ExtensionPreferences {
             this._previews.push(media);
             media.play();
         } catch (e) {
-            console.error(`[Appchime] preview failed: ${e.message}`);
+            this._reportError('preview', e);
         }
     }
 }
