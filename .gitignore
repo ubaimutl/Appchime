@@ -1,0 +1,4 @@
+/dist/
+__pycache__/
+*.pyc
+appchime@ubai.dev/schemas/gschemas.compiled

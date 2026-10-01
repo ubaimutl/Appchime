@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.appchime" path="/org/gnome/shell/extensions/appchime/">
+    <key name="default-sound" type="s">
+      <default>'chime'</default>
+      <summary>Default sound</summary>
+      <description>Bundled sound id played for notifications without a per-app rule, 'custom' for a custom file, or 'mute' for silence.</description>
+    </key>
+    <key name="default-custom-file" type="s">
+      <default>''</default>
+      <summary>Default custom sound file</summary>
+      <description>Absolute path or file:// URI used when default-sound is 'custom'.</description>
+    </key>
+    <key name="app-rules" type="s">
+      <default>'{}'</default>
+      <summary>Per-app sound rules</summary>
+      <description>JSON object mapping an app identifier (desktop file id, e.g. "org.gnome.Nautilus.desktop") to {"sound": id|"custom"|"mute", "file": path}. Missing or invalid entries fall back to the default sound.</description>
+    </key>
+    <key name="seen-apps" type="s">
+      <default>'{}'</default>
+      <summary>Apps seen sending notifications</summary>
+      <description>JSON object mapping an app identifier to its display name, recorded when a notification is observed. Used to list apps in preferences.</description>
+    </key>
+    <key name="rate-limit-ms" type="i">
+      <default>1000</default>
+      <range min="0" max="10000"/>
+      <summary>Rate limit</summary>
+      <description>Minimum milliseconds between two played sounds. Extra notifications inside the window stay silent.</description>
+    </key>
+    <key name="respect-dnd" type="b">
+      <default>true</default>
+      <summary>Respect Do Not Disturb</summary>
+      <description>When true, no sound is played while Do Not Disturb is on (org.gnome.desktop.notifications show-banners is false).</description>
+    </key>
+    <key name="play-with-hint" type="b">
+      <default>false</default>
+      <summary>Also play for hint-carrying notifications</summary>
+      <description>When false, Appchime stays silent for notifications that already carry their own sound hint, so the sound is not doubled. When true, the Appchime sound plays as well.</description>
+    </key>
+    <key name="debug" type="b">
+      <default>false</default>
+      <summary>Debug logging</summary>
+      <description>When true, Appchime logs resolved app identifiers and playback decisions to the journal. Useful for finding an app's identifier.</description>
+    </key>
+    <key name="ignore-patterns" type="as">
+      <default>[]</default>
+      <summary>Ignored notifications</summary>
+      <description>Case-insensitive substrings: a notification stays silent when its app identifier or display name contains any of them. Example: suspend.</description>
+    </key>
+  </schema>
+</schemalist>

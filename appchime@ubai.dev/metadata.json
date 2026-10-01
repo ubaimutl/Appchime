@@ -1,0 +1,13 @@
+{
+    "name": "Appchime",
+    "description": "Play a notification sound per app: one default sound for all notifications, with optional per-app sounds or mute.",
+    "uuid": "appchime@ubai.dev",
+    "shell-version": [
+        "46",
+        "47",
+        "48",
+        "49",
+        "50"
+    ],
+    "settings-schema": "org.gnome.shell.extensions.appchime"
+}
